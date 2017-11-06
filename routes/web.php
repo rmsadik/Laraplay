@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/lists', 'ListsController@index');
+Route::get('/lists/{listId}/members', 'ListsController@show');
+
+Route::get('/lists/{listId}/{memberId}/edit', 'ListsController@edit');
+Route::get('/lists/create', 'ListsController@create');
+

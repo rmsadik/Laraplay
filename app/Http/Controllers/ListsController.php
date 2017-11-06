@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \DrewM\MailChimp\MailChimp;
 
 
+
+//https://github.com/drewm/mailchimp-api
 class ListsController extends Controller
 {
+    
+    protected $MailChimp;
+    public function __construct() 
+    {
+        $this->MailChimp = new MailChimp('512a71fecfbe3fe4c0b8e4e96b69ebfa-us17');
+
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,12 @@ class ListsController extends Controller
      */
     public function index()
     {
-        //
+        //05d6863df1
+        $mailchimp = $this->MailChimp->get('lists');
+        $lists = $mailchimp['lists'];
+// dd($lists);
+        return view('list.index', compact('lists'));
+
     }
 
     /**
@@ -46,7 +62,12 @@ class ListsController extends Controller
      */
     public function show($id)
     {
-        //
+        $list = $this->MailChimp->get("lists/$id/members");
+        $members = $list['members'];
+
+// dd($members);
+        return view('list.show', compact('members'));
+       //
     }
 
     /**
@@ -55,9 +76,12 @@ class ListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($listId, $emailId)
     {
-        //
+        $subscriberHash = $this->MailChimp->subscriberHash($emailId);
+        $member = $this->MailChimp->get("lists/$listId/members/$subscriberHash");
+        return view('list.edit', compact('member'));
+
     }
 
     /**
@@ -67,9 +91,16 @@ class ListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $listId)
     {
-        //
+        $list_id = 'b1234346';
+        $subscriber_hash = $MailChimp->subscriberHash('davy@example.com');
+
+        // $result = $MailChimp->patch("lists/$list_id/members/$subscriber_hash", [
+        //                 'merge_fields' => ['FNAME'=>'Davy', 'LNAME'=>'Jones'],
+        //                 'interests'    => ['2s3a384h' => true],
+        //             ]);     
+        
     }
 
     /**
