@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        
+    	<h1>Show all list</h1>
     </head>
     <body>
         <ul>
@@ -14,5 +14,10 @@
             @endforeach	
 
         </ul>
+        <div>
+        	<a href="/lists/{{$member['list_id'] }}/create">Create New Member</a>
+        </div>
+
+
     </body>
 </html>

@@ -12,10 +12,10 @@ class ListsController extends Controller
 {
     
     protected $MailChimp;
+    protected $fillable = ['fname', 'lname', 'email'];
     public function __construct() 
     {
         $this->MailChimp = new MailChimp('512a71fecfbe3fe4c0b8e4e96b69ebfa-us17');
-
     }
     
     /**
@@ -25,12 +25,10 @@ class ListsController extends Controller
      */
     public function index()
     {
-        //05d6863df1
         $mailchimp = $this->MailChimp->get('lists');
         $lists = $mailchimp['lists'];
-// dd($lists);
-        return view('list.index', compact('lists'));
 
+        return view('list.index', compact('lists'));
     }
 
     /**
@@ -38,9 +36,10 @@ class ListsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($listId)
     {
-        //
+        return view('list.create', compact('listId'));
+
     }
 
     /**
@@ -49,9 +48,28 @@ class ListsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $listId)
     {
-        //
+        $this->validate(request(), [
+            'fname' => 'required',
+            'lname' => 'required',
+            'email' => 'required',
+
+        ]);
+
+        $result = $this->MailChimp->post("lists/$listId/members", [
+                'email_address' => $request['email'],
+                'merge_fields' => ['FNAME'=>$request['fname'], 'LNAME'=>$request['lname']],
+                'status'        => 'subscribed',
+            ]);
+
+
+        if ($this->MailChimp->success()) {
+            return $this->show($listId);
+        } else {
+            return $this->MailChimp->getLastError();
+        }
+
     }
 
     /**
@@ -65,9 +83,7 @@ class ListsController extends Controller
         $list = $this->MailChimp->get("lists/$id/members");
         $members = $list['members'];
 
-// dd($members);
         return view('list.show', compact('members'));
-       //
     }
 
     /**
@@ -80,8 +96,8 @@ class ListsController extends Controller
     {
         $subscriberHash = $this->MailChimp->subscriberHash($emailId);
         $member = $this->MailChimp->get("lists/$listId/members/$subscriberHash");
+ 
         return view('list.edit', compact('member'));
-
     }
 
     /**
@@ -91,16 +107,14 @@ class ListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $listId)
+    public function update(Request $request, $listId, $emailId)
     {
-        $list_id = 'b1234346';
-        $subscriber_hash = $MailChimp->subscriberHash('davy@example.com');
-
-        // $result = $MailChimp->patch("lists/$list_id/members/$subscriber_hash", [
-        //                 'merge_fields' => ['FNAME'=>'Davy', 'LNAME'=>'Jones'],
-        //                 'interests'    => ['2s3a384h' => true],
-        //             ]);     
+        $subscriberHash = $this->MailChimp->subscriberHash($emailId);
+        $result = $this->MailChimp->patch("lists/$listId/members/$subscriberHash", [
+                        'merge_fields' => ['FNAME'=>$request['fname'], 'LNAME'=>$request['lname']],
+                    ]);
         
+        return $this->show($listId);
     }
 
     /**
