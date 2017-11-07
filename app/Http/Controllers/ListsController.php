@@ -26,6 +26,7 @@ class ListsController extends Controller
     public function index()
     {
         $mailchimp = $this->MailChimp->get('lists');
+        // dd($this->MailChimp->get());
         $lists = $mailchimp['lists'];
 
         return view('list.index', compact('lists'));
@@ -78,12 +79,12 @@ class ListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($listId)
     {
-        $list = $this->MailChimp->get("lists/$id/members");
+        $list = $this->MailChimp->get("lists/$listId/members");
         $members = $list['members'];
 
-        return view('list.show', compact('members'));
+        return view('list.show', compact('members','listId'));
     }
 
     /**

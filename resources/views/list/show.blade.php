@@ -5,17 +5,18 @@
     </head>
     <body>
         <ul>
-        	@foreach($members as $member)
-            	<li>
-            		<a href="/lists/{{$member['list_id'] }}/{{$member['email_address']}}/edit">
-            			{{ $member['email_address'] }}
-            		</a>	
-            	</li>
-            @endforeach	
-
+			@if(count($members))
+				@foreach($members as $member)
+					<li>
+						<a href="/lists/{{$member['list_id'] }}/{{ $member['email_address']}}/edit">
+							{{ $member['email_address'] }}
+						</a>
+					</li>
+				@endforeach
+			@endif
         </ul>
         <div>
-        	<a href="/lists/{{$member['list_id'] }}/create">Create New Member</a>
+			<a href="/lists/{{ $listId }}/create">Create New Member</a>
         </div>
 
 
