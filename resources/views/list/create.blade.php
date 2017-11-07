@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Edit member')
+@section('title', 'Create member')
 
 @section('content')
         <form name= "create_member" action="/lists/{{$listId}}/store/" method="POST"> 
