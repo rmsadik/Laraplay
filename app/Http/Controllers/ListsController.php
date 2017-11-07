@@ -5,36 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \DrewM\MailChimp\MailChimp;
 
+/**
+ * List controller to interact with MailChimp API for basic CRUD functionality
 
-
-//https://github.com/drewm/mailchimp-api
+ * MailChimp API v3: http://developer.mailchimp.com
+ * This wrapper: https://github.com/drewm/mailchimp-api
+ *
+ * @author Mohamed Sathik <mhmd.sathik@gmail.com>
+ * @version 1.0
+ */
 class ListsController extends Controller
 {
-    
+    /**
+     * MailChimp Oject.
+     */ 
     protected $MailChimp;
+
+    /**
+     * Fillable array to whitelist the form input fields
+     * Laraval array $fillable
+     */
     protected $fillable = ['fname', 'lname', 'email'];
+    
+    /**
+     * Constructor
+     */
     public function __construct() 
     {
         $this->MailChimp = new MailChimp('512a71fecfbe3fe4c0b8e4e96b69ebfa-us17');
     }
     
     /**
-     * Display a listing of the resource.
+     * Displays all lists for the given API key
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $mailchimp = $this->MailChimp->get('lists');
-        // dd($this->MailChimp->get());
         $lists = $mailchimp['lists'];
 
         return view('list.index', compact('lists'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Shows the form for creating a new member.
      *
+     * @param int listId
      * @return \Illuminate\Http\Response
      */
     public function create($listId)
@@ -47,6 +64,8 @@ class ListsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $lisId
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $listId)
@@ -74,9 +93,9 @@ class ListsController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display all members from the list.
      *
-     * @param  int  $id
+     * @param  int  $lisId
      * @return \Illuminate\Http\Response
      */
     public function show($listId)
@@ -88,9 +107,11 @@ class ListsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified member.
      *
-     * @param  int  $id
+     * @param  int  $listId
+     * @param  string  $emailId
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($listId, $emailId)
@@ -102,11 +123,12 @@ class ListsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the  member from the list.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $listId
+     * @param  string  $emailId
+     * @return list of members | error message
      */
     public function update(Request $request, $listId, $emailId)
     {
@@ -119,13 +141,22 @@ class ListsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a member from the list.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $listId
+     * @param  string  $emailId
+
+     * @return list of members | error message
      */
-    public function destroy($id)
+    public function destroy($listId, $emailId)
     {
-        //
+        $subscriber_hash = $this->MailChimp->subscriberHash($emailId);
+        $this->MailChimp->delete("lists/$listId/members/$subscriber_hash");
+
+       if ($this->MailChimp->success()) {
+            return $this->show($listId);
+        } else {
+            return $this->MailChimp->getLastError();
+        }
     }
 }

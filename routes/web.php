@@ -23,5 +23,7 @@ Route::post('/lists/{listId}/{emailId}/update', 'ListsController@update');
 Route::get('/lists/{listId}/create', 'ListsController@create');
 Route::post('/lists/{listId}/store', 'ListsController@store');
 
+Route::get('/lists/{listId}/{emailId}/delete', 'ListsController@destroy');
+
 // Route::get('/lists/create', 'ListsController@create');
 

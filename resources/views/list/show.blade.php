@@ -6,13 +6,28 @@
     <body>
         <ul>
 			@if(count($members))
+				<table border="1">
 				@foreach($members as $member)
-					<li>
-						<a href="/lists/{{$member['list_id'] }}/{{ $member['email_address']}}/edit">
-							{{ $member['email_address'] }}
-						</a>
-					</li>
+					<tr>
+						<td>
+							<li>
+								<a href="/lists/{{$member['list_id'] }}/{{ $member['email_address']}}/edit">
+									{{ $member['email_address'] }}
+								</a>
+							</li>
+						</td>
+						<td>
+							<a href="/lists/{{$member['list_id'] }}/{{ $member['email_address']}}/edit">edit</a>
+						</td>
+						<td>
+							<a href="/lists/{{$member['list_id'] }}/{{ $member['email_address']}}/delete">delete</a>
+						</td>
+
+					</tr>
+
 				@endforeach
+				</table>
+
 			@endif
         </ul>
         <div>
