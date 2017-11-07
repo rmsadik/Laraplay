@@ -1,9 +1,8 @@
-<!doctype html>
-<html>
-    <head>
-        <h1>Edit Member</h1>
-    </head>
-    <body>
+@extends('layouts.master')
+
+@section('title', 'Edit member')
+
+@section('content')
         <form name= "edit_member" action="/lists/{{ $member['list_id'] }}/{{ $member['email_address']}}/update" method="POST"> 
             {{ csrf_field() }}
             <table>
@@ -28,7 +27,7 @@
                         <label for="email">E-mail:</label>
                     </td>
                     <td>
-                        <input type="email" id="email" name="email" value=" {{$member['email_address'] }}" />
+                        <input type="email" id="email" name="email" value=" {{$member['email_address'] }}" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -40,5 +39,4 @@
                 </tr>
             </table>    
         </form>  
-    </body>
-</html>
+@stop

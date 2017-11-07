@@ -1,9 +1,8 @@
-<!doctype html>
-<html>
-    <head>
-        <h1>Create new member</h1>
-    </head>
-    <body>
+@extends('layouts.master')
+
+@section('title', 'Edit member')
+
+@section('content')
         <form name= "create_member" action="/lists/{{$listId}}/store/" method="POST"> 
             {{ csrf_field() }}
             <table>
@@ -41,9 +40,4 @@
                 </tr>
             </table>    
         </form>
-
-        <footer class="row">
-            @include('layouts.footer')
-        </footer>
-    </body>
-</html>
+@stop

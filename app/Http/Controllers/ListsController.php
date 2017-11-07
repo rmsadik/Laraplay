@@ -18,7 +18,7 @@ class ListsController extends Controller
 {
     /**
      * MailChimp Oject.
-     */ 
+     */
     protected $MailChimp;
 
     /**
@@ -26,13 +26,15 @@ class ListsController extends Controller
      * Laraval array $fillable
      */
     protected $fillable = ['fname', 'lname', 'email'];
-    
+
+    protected $apiKey = '512a71fecfbe3fe4c0b8e4e96b69ebfa-us17';
+
     /**
      * Constructor
      */
     public function __construct() 
     {
-        $this->MailChimp = new MailChimp('512a71fecfbe3fe4c0b8e4e96b69ebfa-us17');
+        $this->MailChimp = new MailChimp($this->apiKey);
     }
     
     /**

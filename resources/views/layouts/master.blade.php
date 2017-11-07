@@ -1,25 +1,17 @@
 <!doctype html>
 <html>
 <head>
-    @include('includes.head')
+   <h1> Mail Chimp API - @yield('title') </h1>
 </head>
 <body>
-<div class="container">
+    <div class="container">
 
-    <header class="row">
-        @include('includes.header')
-    </header>
+        <div id="main" class="row">
 
-    <div id="main" class="row">
+                @yield('content')
 
-            @yield('content')
+        </div>
 
     </div>
-
-    <footer class="row">
-        @include('includes.footer')
-    </footer>
-
-</div>
 </body>
 </html>

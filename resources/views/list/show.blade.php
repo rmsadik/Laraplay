@@ -1,9 +1,8 @@
-<!doctype html>
-<html>
-    <head>
-    	<h1>Show all list</h1>
-    </head>
-    <body>
+@extends('layouts.master')
+
+@section('title', 'Show all members for the list')
+
+@section('content')
         <ul>
 			@if(count($members))
 				<table border="1">
@@ -33,7 +32,4 @@
         <div>
 			<a href="/lists/{{ $listId }}/create">Create New Member</a>
         </div>
-
-
-    </body>
-</html>
+@stop
