@@ -3,6 +3,7 @@
 ## Laraplay
 
 Laravel code collection
+ - /lists  :  Laravel CRUD functionality with MailchimpAPI
 
 ## Active URLs
 
