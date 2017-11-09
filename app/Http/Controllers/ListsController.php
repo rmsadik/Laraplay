@@ -25,9 +25,12 @@ class ListsController extends Controller
      * Fillable array to whitelist the form input fields
      * Laraval array $fillable
      */
-    protected $fillable = ['fname', 'lname', 'email'];
+    protected $fillable = ['fname', 'lname', 'email', 'listname'];
 
     protected $apiKey = '512a71fecfbe3fe4c0b8e4e96b69ebfa-us17';
+
+    protected $url = "us17.api.mailchimp.com/3.0/lists";
+
 
     /**
      * Constructor
@@ -56,41 +59,41 @@ class ListsController extends Controller
      * @param int listId
      * @return \Illuminate\Http\Response
      */
-    public function create($listId)
+    public function create()
     {
-        // return view('list.create', compact('listId'));
+         return view('list.create');
 
     }
 
-    /**
-     * Store a newly created resource in storage.
+     /**
+     * Store a newly created list.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $lisId
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request, $listId)
+    public function store(Request $request)
     {
-        // $this->validate(request(), [
-        //     'fname' => 'required',
-        //     'lname' => 'required',
-        //     'email' => 'required',
+        $name = $request['listname'];
+        $data = '{"name":"'.$name.'","contact":{"company":"MailChimp","address1":"675 Ponce De Leon Ave NE","address2":"Suite 5000","city":"Atlanta","state":"GA","zip":"30308","country":"US","phone":""},"permission_reminder":"You are receiving this email because you signed up for updates about Freds newest hats.","campaign_defaults":{"from_name":"Freddie","from_email":"fredddddie@freddiehats.com","subject":"","language":"en"},"email_type_option":true}';
 
-        // ]);
+        $ch = curl_init();
 
-        // $result = $this->MailChimp->post("lists/$listId/members", [
-        //         'email_address' => $request['email'],
-        //         'merge_fields' => ['FNAME'=>$request['fname'], 'LNAME'=>$request['lname']],
-        //         'status'        => 'subscribed',
-        //     ]);
+        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_USERPWD, "anystring" . ":" . $this->apiKey);
 
+        $headers = array();
+        $headers[] = "Content-Type: application/x-www-form-urlencoded";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        // if ($this->MailChimp->success()) {
-        //     return $this->show($listId);
-        // } else {
-        //     return $this->MailChimp->getLastError();
-        // }
+        curl_exec($ch);
+        if (curl_errno($ch))
+        {
+            echo 'Error:' . curl_error($ch);
+        }
+        return redirect("/");
 
     }
 

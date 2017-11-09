@@ -1,43 +1,30 @@
 @extends('layouts.master')
 
-@section('title', 'Create member')
+@section('title', 'Create List')
 
 @section('content')
-        <form name= "create_member" action="/lists/{{$listId}}/store/" method="POST"> 
+    <div>
+        <form name= "create_list" action="/lists/store/" method="POST">
             {{ csrf_field() }}
             <table>
+                <tr><td>&nbsp;</td></tr>
                 <tr>
                     <td>
-                        <label for="fname">First Name:</label>
+                        <label for="listname">List Name:</label>
                     </td>
                     <td>
-                        <input type="text" id="fname" name="fname" required />
+                        <input type="text" id="listname" name="listname" required />
                     </td>
                 </tr>
+                <tr><td>&nbsp;</td></tr>
                 <tr>
                     <td>
-                        <label for="lname">Last Name:</label>
-                    </td>
-                    <td>
-                        <input type="text" id="lname" name="lname" required />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="email">E-mail:</label>
-                    </td>
-                    <td>
-                        <input type="email" id="email" name="email" required />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="hidden" id="listId" name="listId" value="{{ $listId }}" />
                         <input type="submit" id="submit" name="submit" value="Submit" />
                     </td>
                     <td>
                     </td>
                 </tr>
-            </table>    
+            </table>
         </form>
+    </div>
 @stop
