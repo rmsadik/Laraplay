@@ -10,6 +10,8 @@ Route::get('/lists/edit', 'ListsController@edit');
 Route::post('/lists/{listId}/update', 'ListsController@update');
 Route::get('/lists/{listId}/delete', 'ListsController@destroy');
 Route::post('/lists/store', 'ListsController@store');
+Route::get('/lists/logout', 'ListsController@logout');
+
 
 //members
 Route::get('/lists/{listId}/members', 'MembersController@show');

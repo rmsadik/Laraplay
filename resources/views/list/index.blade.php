@@ -31,9 +31,10 @@
 						</li>
 						</td>
 						<td><a href="/lists/{{ $list['id'] }}/edit">Edit</td>
-						<td><a href="/lists/{{ $list['id'] }}/delete">Delete</td>
+                        <td><a href="/lists/{{ $list['id'] }}/delete">Delete</td>
+                        <td><a href="/lists/{{ $list['id'] }}/create">Create Member</td>
 
-					</tr>
+                    </tr>
 					@endforeach
 				</table>
 

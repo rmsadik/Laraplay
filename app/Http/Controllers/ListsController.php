@@ -40,6 +40,10 @@ class ListsController extends Controller
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        if(isset($_SESSION['mailchimp_apikey']))
+        {
+            $this->apiKey = $_SESSION['mailchimp_apikey'];
+        }
     }
     
     /**
@@ -63,7 +67,7 @@ class ListsController extends Controller
             return view('list.index', compact('invalidApiKey','noAPI'));
         }
 
-        $this->MailChimp = new MailChimp($_SESSION['mailchimp_apikey']);
+        $this->MailChimp = new MailChimp($this->apiKey);
         $mailchimp = $this->MailChimp->get('lists');
         //if invalid api key or suspended api key
         if(isset($mailchimp['status']) && $mailchimp['status'] == 401)
@@ -192,7 +196,18 @@ class ListsController extends Controller
         }
         curl_close ($ch);
 
-        return redirect("/");
+        return redirect("/lists");
 
+    }
+
+    /**
+     * Logout from the List
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logout()
+    {
+        unset($_SESSION['mailchimp_apikey']);
+        return redirect("/lists");
     }
 }
