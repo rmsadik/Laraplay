@@ -4,13 +4,23 @@
 
 @section('content')
         <ul>
-            @foreach($lists as $list)
-                <li>
-                    <a href="/lists/{{$list['id']}}/members">
-                        {{ $list['name'] }}
-                    </a>    
-                </li>
-            @endforeach 
+        	<table border="1">
+	            @foreach($lists as $list)
+	        	<tr>
+	        		<td>	
+	                <li>
+	                    <a href="/lists/{{$list['id']}}/members">
+	                        {{ $list['name'] }}
+	                    </a>    
+	                </li>
+	                </td>
+	                <td><a href="/lists/edit">Edit</td>
+	                <td><a href="/lists/delete">Delete</td>
+
+	            </tr>    
+	            @endforeach        		
+	        </table>
+ 
 
         </ul>
 
