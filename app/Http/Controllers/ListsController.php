@@ -25,9 +25,9 @@ class ListsController extends Controller
      * Fillable array to whitelist the form input fields
      * Laraval array $fillable
      */
-    protected $fillable = ['fname', 'lname', 'email', 'listname'];
+    protected $fillable = ['fname', 'lname', 'email', 'listname', 'apiKey'];
 
-    protected $apiKey = '512a71fecfbe3fe4c0b8e4e96b69ebfa-us17';
+    protected $apiKey = '';
 
     protected $url = "us17.api.mailchimp.com/3.0/lists/";
 
@@ -37,7 +37,7 @@ class ListsController extends Controller
      */
     public function __construct() 
     {
-        $this->MailChimp = new MailChimp($this->apiKey);
+        session_start();
     }
     
     /**
@@ -45,12 +45,29 @@ class ListsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $noAPI = $invalidApiKey =  false;
+        if(isset($request['apiKey']))
+        {
+            $this ->apiKey = $_SESSION['mailchimp_apikey'] = $request['apiKey'];
+        }
+
+        if(!isset($_SESSION['mailchimp_apikey']) || empty($this->apiKey))
+        {
+            $noAPI = true;
+            return view('list.index', compact('invalidApiKey','noAPI'));
+        }
+        $this->MailChimp = new MailChimp($this->apiKey);
         $mailchimp = $this->MailChimp->get('lists');
+        if(isset($mailchimp['status']) && $mailchimp['status'] == 401)
+        {
+            $invalidApiKey = $noAPI = true;
+            return view('list.index', compact('invalidApiKey','noAPI'));
+        }
         $lists = $mailchimp['lists'];
 
-        return view('list.index', compact('lists'));
+        return view('list.index', compact('lists', 'invalidApiKey','noAPI'));
     }
 
     /**

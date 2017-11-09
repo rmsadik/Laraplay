@@ -27,14 +27,20 @@ class MembersController extends Controller
      */
     protected $fillable = ['fname', 'lname', 'email'];
 
-    protected $apiKey = '512a71fecfbe3fe4c0b8e4e96b69ebfa-us17';
-
     /**
      * Constructor
      */
     public function __construct() 
     {
-        $this->MailChimp = new MailChimp($this->apiKey);
+        session_start();
+//        dd($_SESSION['mailchimp_apikey']);
+        if(!isset($_SESSION['mailchimp_apikey']))
+        {
+            $noAPI = true;
+            return view('list.index', compact('noAPI'));
+        }
+        $this->MailChimp = new MailChimp($_SESSION['mailchimp_apikey']);
+
     }
     
     /**

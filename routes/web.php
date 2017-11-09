@@ -4,6 +4,7 @@
 
 Route::get('/', 'ListsController@index');
 Route::get('/lists', 'ListsController@index');
+Route::post('/lists/index', 'ListsController@index');
 Route::get('/lists/create', 'ListsController@create');
 Route::get('/lists/edit', 'ListsController@edit');
 Route::post('/lists/{listId}/update', 'ListsController@update');
