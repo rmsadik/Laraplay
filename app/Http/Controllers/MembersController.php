@@ -32,7 +32,9 @@ class MembersController extends Controller
      */
     public function __construct() 
     {
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
 //        dd($_SESSION['mailchimp_apikey']);
         if(!isset($_SESSION['mailchimp_apikey']))
         {

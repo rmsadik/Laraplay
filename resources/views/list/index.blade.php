@@ -5,14 +5,18 @@
 @section('content')
 		@if($noAPI || $invalidApiKey)
             @if($invalidApiKey)
-                <h3>Invalid API key, please provide valid key.
+                <div>
+                    <h3>Invalid API key, please provide valid key.</h3>
+                </div>
             @endif
-			<form method="POST" action="/lists/index">
-                {{ csrf_field() }}
-                <label>Enter access token</label>
-				<input type="text" id="apiKey" name="apiKey"/>
-                <input type="submit" value="Submit">
-			</form>
+            <div>
+                <form method="POST" action="/lists/index">
+                    {{ csrf_field() }}
+                    <label>Enter API Key</label>
+                    <input type="text" id="apiKey" name="apiKey" style="width:300px;" />
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
 
 		@else
 			<ul>
