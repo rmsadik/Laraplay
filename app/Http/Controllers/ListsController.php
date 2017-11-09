@@ -50,21 +50,20 @@ class ListsController extends Controller
     public function index(Request $request)
     {
         $noAPI = $invalidApiKey =  false;
-        //get the apikey from the input
+        //get the apiKey from the input
         if(isset($request['apiKey']))
         {
             $this->apiKey = $_SESSION['mailchimp_apikey'] = $request['apiKey'];
         }
 
         //if no session or the `apiKey` is not set
-        if(!$this->apiKey)
+        if(!isset($_SESSION['mailchimp_apikey']))
         {
             $noAPI = true;
             return view('list.index', compact('invalidApiKey','noAPI'));
         }
 
-
-        $this->MailChimp = new MailChimp($this->apiKey);
+        $this->MailChimp = new MailChimp($_SESSION['mailchimp_apikey']);
         $mailchimp = $this->MailChimp->get('lists');
         //if invalid api key or suspended api key
         if(isset($mailchimp['status']) && $mailchimp['status'] == 401)
@@ -73,7 +72,6 @@ class ListsController extends Controller
             return view('list.index', compact('invalidApiKey','noAPI'));
         }
         $lists = $mailchimp['lists'];
-
         return view('list.index', compact('lists', 'invalidApiKey','noAPI'));
     }
 
