@@ -29,7 +29,7 @@ class ListsController extends Controller
 
     protected $apiKey = '512a71fecfbe3fe4c0b8e4e96b69ebfa-us17';
 
-    protected $url = "us17.api.mailchimp.com/3.0/lists";
+    protected $url = "us17.api.mailchimp.com/3.0/lists/";
 
 
     /**
@@ -89,10 +89,12 @@ class ListsController extends Controller
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         curl_exec($ch);
+
         if (curl_errno($ch))
         {
-            echo 'Error:' . curl_error($ch);
+            return 'Error:' . curl_error($ch);
         }
+        curl_close ($ch);
         return redirect("/");
 
     }
@@ -145,23 +147,30 @@ class ListsController extends Controller
         // return $this->show($listId);
     }
 
+
     /**
-     * Delete a member from the list.
+     * Delete a list
      *
-     * @param  int  $listId
-     * @param  string  $emailId
-
-     * @return list of members | error message
+     * @param $listId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string
      */
-    public function destroy($listId, $emailId)
+    public function destroy($listId)
     {
-       //  $subscriber_hash = $this->MailChimp->subscriberHash($emailId);
-       //  $this->MailChimp->delete("lists/$listId/members/$subscriber_hash");
+        $ch = curl_init();
 
-       // if ($this->MailChimp->success()) {
-       //      return $this->show($listId);
-       //  } else {
-       //      return $this->MailChimp->getLastError();
-       //  }
+        curl_setopt($ch, CURLOPT_URL, $this->url . $listId);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+
+        curl_setopt($ch, CURLOPT_USERPWD, "anystring" . ":" . $this->apiKey);
+
+        curl_exec($ch);
+        if (curl_errno($ch)) {
+            return 'Error:' . curl_error($ch);
+        }
+        curl_close ($ch);
+
+        return redirect("/");
+
     }
 }

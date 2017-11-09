@@ -9,13 +9,13 @@
 	        	<tr>
 	        		<td>	
 	                <li>
-	                    <a href="/lists/{{$list['id']}}/members">
+	                    <a href="/lists/{{ $list['id'] }}/members">
 	                        {{ $list['name'] }}
 	                    </a>    
 	                </li>
 	                </td>
-	                <td><a href="/lists/edit">Edit</td>
-	                <td><a href="/lists/delete">Delete</td>
+	                <td><a href="/lists/{{ $list['id'] }}/edit">Edit</td>
+	                <td><a href="/lists/{{ $list['id'] }}/delete">Delete</td>
 
 	            </tr>    
 	            @endforeach        		

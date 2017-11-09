@@ -6,7 +6,8 @@ Route::get('/', 'ListsController@index');
 Route::get('/lists', 'ListsController@index');
 Route::get('/lists/create', 'ListsController@create');
 Route::get('/lists/edit', 'ListsController@edit');
-Route::post('/lists/update', 'ListsController@update');
+Route::post('/lists/{listId}/update', 'ListsController@update');
+Route::get('/lists/{listId}/delete', 'ListsController@destroy');
 Route::post('/lists/store', 'ListsController@store');
 
 //members
