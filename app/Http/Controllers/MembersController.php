@@ -35,7 +35,6 @@ class MembersController extends Controller
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-//        dd($_SESSION['mailchimp_apikey']);
         if(!isset($_SESSION['mailchimp_apikey']))
         {
             $noAPI = true;
@@ -44,18 +43,13 @@ class MembersController extends Controller
         $this->MailChimp = new MailChimp($_SESSION['mailchimp_apikey']);
 
     }
-    
+
     /**
-     * Displays all lists for the given API key
-     *
-     * @return \Illuminate\Http\Response
+     * Index page for Memebers
      */
     public function index()
     {
-        // $mailchimp = $this->MailChimp->get('lists');
-        // $lists = $mailchimp['lists'];
-
-        // return view('list.index', compact('lists'));
+        //
     }
 
     /**
@@ -72,11 +66,9 @@ class MembersController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $lisId
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $listId
+     * @return array|false|\Illuminate\Http\Response
      */
     public function store(Request $request, $listId)
     {
@@ -104,9 +96,8 @@ class MembersController extends Controller
 
     /**
      * Display all members from the list.
-     *
-     * @param  int  $lisId
-     * @return \Illuminate\Http\Response
+     * @param $listId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($listId)
     {
@@ -134,20 +125,22 @@ class MembersController extends Controller
 
     /**
      * Update the  member from the list.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $listId
-     * @param  string  $emailId
-     * @return list of members | error message
+     * @param Request $request
+     * @param $listId
+     * @param $emailId
+     * @return array|false|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function update(Request $request, $listId, $emailId)
     {
         $subscriberHash = $this->MailChimp->subscriberHash($emailId);
-        $result = $this->MailChimp->patch("lists/$listId/members/$subscriberHash", [
+        $this->MailChimp->patch("lists/$listId/members/$subscriberHash", [
                         'merge_fields' => ['FNAME'=>$request['fname'], 'LNAME'=>$request['lname']],
                     ]);
-        
-        return $this->show($listId);
+        if ($this->MailChimp->success()) {
+            return $this->show($listId);
+        } else {
+            return $this->MailChimp->getLastError();
+        }
     }
 
     /**
