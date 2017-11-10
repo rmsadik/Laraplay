@@ -213,7 +213,7 @@ class ListsController extends Controller
         }
         curl_close ($ch);
 
-         return $this->show($request['listId']);
+         return redirect("/lists");
     }
 
 

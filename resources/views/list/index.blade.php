@@ -33,6 +33,8 @@
 						<td><a href="/lists/{{ $list['id'] }}/edit">Edit</td>
                         <td><a href="/lists/{{ $list['id'] }}/delete">Delete</td>
                         <td><a href="/lists/{{ $list['id'] }}/create">Create Member</td>
+                        <td><a href="/lists/{{ $list['id'] }}/members">Show Members</td>
+
 
                     </tr>
 					@endforeach
