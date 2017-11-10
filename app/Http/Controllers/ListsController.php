@@ -133,10 +133,25 @@ class ListsController extends Controller
      */
     public function show($listId)
     {
-    //     $list = $this->MailChimp->get("lists/$listId/members");
-    //     $members = $list['members'];
-
-    //     return view('list.show', compact('members','listId'));
+//        $ch = curl_init();
+//
+//        curl_setopt($ch, CURLOPT_URL, $this->url . $listId );
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+//
+//        curl_setopt($ch, CURLOPT_USERPWD, "anystring" . ":" . "apikey");
+//
+//        $list = curl_exec($ch);
+//        if (curl_errno($ch)) {
+//            echo 'Error:' . curl_error($ch);
+//        }
+//        curl_close ($ch);
+//        dd($list);
+//
+//    //     $list = $this->MailChimp->get("lists/$listId/members");
+//    //     $members = $list['members'];
+//
+//         return view('list.show', compact('list'));
     }
 
     /**
@@ -147,30 +162,58 @@ class ListsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($listId, $emailId)
+    public function edit($listId)
     {
-    //     $subscriberHash = $this->MailChimp->subscriberHash($emailId);
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->url . $listId );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+
+        curl_setopt($ch, CURLOPT_USERPWD, "anystring" . ":" . $this->apiKey);
+
+        $list = json_decode(curl_exec($ch), true);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close ($ch);
+
+
+
+        //     $subscriberHash = $this->MailChimp->subscriberHash($emailId);
     //     $member = $this->MailChimp->get("lists/$listId/members/$subscriberHash");
  
-    //     return view('list.edit', compact('member'));
+         return view('list.edit', compact('list'));
     }
 
     /**
-     * Update the  member from the list.
+     * Update the list name
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $listId
-     * @param  string  $emailId
-     * @return list of members | error message
+     * @param Request $request
+     * @return \Illuminate\Http\Response|string
      */
-    public function update(Request $request, $listId, $emailId)
+    public function update(Request $request)
     {
-        // $subscriberHash = $this->MailChimp->subscriberHash($emailId);
-        // $result = $this->MailChimp->patch("lists/$listId/members/$subscriberHash", [
-        //                 'merge_fields' => ['FNAME'=>$request['fname'], 'LNAME'=>$request['lname']],
-        //             ]);
-        
-        // return $this->show($listId);
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://us17.api.mailchimp.com/3.0/file-manager/folders/861");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "{\"name\":'".$request['listname']."')}");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+
+        curl_setopt($ch, CURLOPT_USERPWD, "anystring" . ":" . $this->apiKey);
+
+        $headers = array();
+        $headers[] = "Content-Type: application/x-www-form-urlencoded";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return 'Error:' . curl_error($ch);
+        }
+        curl_close ($ch);
+
+         return $this->show($request['listId']);
     }
 
 
