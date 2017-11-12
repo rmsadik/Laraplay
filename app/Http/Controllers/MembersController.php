@@ -45,7 +45,7 @@ class MembersController extends Controller
     }
 
     /**
-     * Index page for Memebers
+     * Index page for Members
      */
     public function index()
     {
@@ -145,11 +145,9 @@ class MembersController extends Controller
 
     /**
      * Delete a member from the list.
-     *
-     * @param  int  $listId
-     * @param  string  $emailId
-
-     * @return list of members | error message
+     * @param $listId
+     * @param $emailId
+     * @return array|false|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function destroy($listId, $emailId)
     {
